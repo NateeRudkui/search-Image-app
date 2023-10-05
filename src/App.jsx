@@ -3,6 +3,7 @@ import { useState } from "react";
 
 function App() {
   const [word, setWord] = useState("");
+  const [photos, setPhotos] = useState([]);
   const key = "8CSGyz5ewq1-Z-ULHaZNt2DWzBAClajg9g0t1w1t_-s";
 
   function searchImage(e) {
@@ -18,7 +19,15 @@ function App() {
     const url = `https://api.unsplash.com/search/photos?page=1&query=${word}&client_id=${key}&per_page=15`;
     const res = await fetch(url);
     const data = await res.json();
+    const results = data.results;
     console.log(data);
+    if (results.length == 0) {
+      alert("ไม่มีรูปที่ท่านค้นหา");
+      setWord("");
+    } else {
+      setPhotos(results);
+      console.log(results);
+    }
   }
   return (
     <>
@@ -32,6 +41,7 @@ function App() {
         />
         <button type="submit">ค้นหา</button>
       </form>
+      <div className="search-result">{photos}</div>
     </>
   );
 }
